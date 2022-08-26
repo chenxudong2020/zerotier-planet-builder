@@ -24,3 +24,10 @@ jobs:
       with:
           name: zerotier-planet.tar.gz.7z
           path: zerotier-planet.tar.gz.7z
+          
+    - name: 上传到cowtransfer
+      if: always()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 64 --no-progress zerotier-planet.tar.gz.7z 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"     
